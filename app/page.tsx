@@ -119,6 +119,10 @@ export default function Home() {
     setPrompt(target);
   }
 
+  function handleAddNewChat() {
+    setChat([]);
+    setQuestion([]);
+  }
   // Single Page
   return (
     <div className="w-full flex flex-col justify-center items-center">
@@ -133,15 +137,13 @@ export default function Home() {
               </h4>
             </div>
             <p className="leading-7 [&:not(:first-child)]:mt-2">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-              Quibusdam dolor blanditiis molestias minus, atque nemo accusamus
-              quasi expedita pariatur aut!
+              This is for Educational Purpose
             </p>
           </div>
-          <Command className="rounded-lg md:min-w-[450px]">
+          <Command className="rounded-lg md:min-w-[450px] pt-12">
             <CommandList>
               <CommandGroup heading="Quick Menu">
-                <CommandItem>
+                <CommandItem onSelect={() => handleAddNewChat()}>
                   <Plus />
                   <span>New Chat</span>
                 </CommandItem>
