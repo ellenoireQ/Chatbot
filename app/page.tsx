@@ -1,103 +1,225 @@
-import Image from "next/image";
+"use client";
+import {
+  ArrowUpToLine,
+  Badge,
+  Bot,
+  Calculator,
+  Calendar,
+  Copy,
+  CreditCard,
+  Github,
+  MessageCircleCode,
+  Moon,
+  Plus,
+  Settings,
+  Smile,
+  Sparkles,
+  Trash,
+  User,
+} from "lucide-react";
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
+} from "@/components/ui/command";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+
+type Chat = {
+  ai: string;
+  user: string;
+};
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [prompt, setPrompt] = useState("");
+  const [response, setResponse] = useState("");
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  // Chat
+  const [chat, setChat] = useState<Chat[]>([]);
+
+  const handleSubmit = async () => {
+    const res = await fetch("/api/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: prompt }),
+    });
+    const data = await res.json();
+    setResponse(data.response);
+    setChat((it) => [...it, { ai: data.response, user: prompt }]);
+    setPrompt("");
+  };
+
+  const textareaRef = useRef(null);
+
+  useEffect(() => {
+    const el = textareaRef.current as any;
+    if (el) {
+      el.style.height = "auto";
+      el.style.height = `${el.scrollHeight}px`;
+    }
+  }, [prompt]);
+
+  // Single Page
+  return (
+    <div className="w-full flex flex-col justify-center items-center">
+      <div className="md:w-9/12 w-full flex">
+        {/** Aside */}
+        <aside className="w-4/12 h-full z-50 sticky top-0">
+          <div className="pt-5">
+            <div className="flex gap-2">
+              <MessageCircleCode className="text-gray-800" />
+              <h4 className="scroll-m-20 text-xl font-semibold tracking-tight text-gray-800">
+                Chatbot
+              </h4>
+            </div>
+            <p className="leading-7 [&:not(:first-child)]:mt-2">
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+              Quibusdam dolor blanditiis molestias minus, atque nemo accusamus
+              quasi expedita pariatur aut!
+            </p>
+          </div>
+          <Command className="rounded-lg md:min-w-[450px]">
+            <CommandList>
+              <CommandGroup heading="Quick Menu">
+                <CommandItem>
+                  <Plus />
+                  <span>New Chat</span>
+                </CommandItem>
+                <CommandItem>
+                  <Moon />
+                  <span>Dark Mode</span>
+                </CommandItem>
+                <CommandItem>
+                  <Github />
+                  <span>Source Code</span>
+                </CommandItem>
+              </CommandGroup>
+              <CommandSeparator />
+              <CommandGroup heading="AI Model">
+                <Select>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="AI Model" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Gen</SelectLabel>
+                      <SelectItem value="apple">
+                        <Bot />
+                        <span>LLama 3.2</span>
+                      </SelectItem>
+                      <SelectItem value="apple">
+                        <Bot />
+                        <span>Gemini</span>
+                      </SelectItem>
+                      <SelectItem value="apple">
+                        <Bot />
+                        <span>Gemma</span>
+                      </SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </CommandGroup>
+            </CommandList>
+          </Command>
+          <Command>
+            <CommandList>
+              <CommandGroup heading="Recommendation Chat">
+                <CommandItem>
+                  <Sparkles />
+                  <span>How to make Italian Foods</span>
+                </CommandItem>
+                <CommandItem>
+                  <Sparkles />
+                  <span>Tips to start a freelance career</span>
+                </CommandItem>
+                <CommandItem>
+                  <Sparkles />
+                  <span>Learn Web Development step-by-step</span>
+                </CommandItem>
+                <CommandItem>
+                  <Sparkles />
+                  <span>How to write a professional CV</span>
+                </CommandItem>
+                <CommandItem>
+                  <Sparkles />
+                  <span>Explore historical places in Indonesia</span>
+                </CommandItem>
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </aside>
+        {/** End aside */}
+        <div className="w-full z-50 h-full relative">
+          <div className="w-full min-h-screen overflow-scroll">
+            {chat.map((it, index) => (
+              <div className="flex flex-col w-full">
+                <Card className="w-full max-w-md self-end mt-12">
+                  <CardHeader>
+                    <CardTitle>You</CardTitle>
+                    <CardDescription>{it.user}</CardDescription>
+                  </CardHeader>
+                </Card>
+                <Card className="w-full max-w-md self-start mt-12 outline-none border-none shadow-none">
+                  <CardHeader>
+                    <CardTitle>AI</CardTitle>
+                    <CardDescription>{it.ai}</CardDescription>
+                  </CardHeader>
+                  <CardFooter>
+                    <Button variant="ghost" size="icon" className="size-8">
+                      <Copy />
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </div>
+            ))}
+          </div>
+          {/** Write anything at here */}
+          <div className="w-full flex gap-2 p-4 bottom-2 sticky bg-gray-200 rounded-4xl items-center">
+            <textarea
+              placeholder="Write your imagination..."
+              className="max-h-40 w-full resize-none overflow-scroll leading-7 border-none focus:outline-none bg-transparent"
+              rows={1}
+              ref={textareaRef}
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+            ></textarea>
+
+            <div
+              className="bg-black p-2 rounded-4xl cursor-pointer"
+              onClick={() => handleSubmit()}
+            >
+              <ArrowUpToLine className="text-white" />
+            </div>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
     </div>
   );
 }
