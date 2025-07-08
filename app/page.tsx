@@ -57,19 +57,17 @@ type Chat = {
   user: string;
 };
 
-type RecommendationChat = {
-  question: string;
-};
 export default function Home() {
+  // prompt
   const [prompt, setPrompt] = useState("");
-  const [response, setResponse] = useState("");
-
   // Chat
   const [chat, setChat] = useState<Chat[]>([]);
-
   // question
   const [question, setQuestion] = useState<any[]>([]);
 
+  //
+  //  Handling when User Click Input Button
+  //
   const handleSubmit = async () => {
     const res = await fetch("/api/generate", {
       method: "POST",
@@ -77,13 +75,14 @@ export default function Home() {
       body: JSON.stringify({ prompt: prompt }),
     });
     const data = await res.json();
-    setResponse(data.response);
     setChat((it) => [...it, { ai: data.response, user: prompt }]);
     setPrompt("");
   };
 
+  //
+  //  Handle Input Height
+  //
   const textareaRef = useRef(null);
-
   useEffect(() => {
     const el = textareaRef.current as any;
     if (el) {
@@ -92,6 +91,9 @@ export default function Home() {
     }
   }, [prompt]);
 
+  //
+  //  Generate Only One Question
+  //
   const handleQuestion = async () => {
     const questionPrompt = `make one question like random question about tech or anything you want, only question like "question" no anything only question. one Question!!`;
     const res = await fetch("/api/generate", {
@@ -110,9 +112,13 @@ export default function Home() {
     }
   });
 
+  //
+  //  Handle Select Quest
+  //
   function handleSelectedQuestion(target: string) {
     setPrompt(target);
   }
+
   // Single Page
   return (
     <div className="w-full flex flex-col justify-center items-center">
