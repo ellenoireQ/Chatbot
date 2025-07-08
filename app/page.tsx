@@ -57,12 +57,18 @@ type Chat = {
   user: string;
 };
 
+type RecommendationChat = {
+  question: string;
+};
 export default function Home() {
   const [prompt, setPrompt] = useState("");
   const [response, setResponse] = useState("");
 
   // Chat
   const [chat, setChat] = useState<Chat[]>([]);
+
+  // question
+  const [question, setQuestion] = useState<any[]>([]);
 
   const handleSubmit = async () => {
     const res = await fetch("/api/generate", {
@@ -86,6 +92,27 @@ export default function Home() {
     }
   }, [prompt]);
 
+  const handleQuestion = async () => {
+    const questionPrompt = `make one question like random question about tech or anything you want, only question like "question" no anything only question. one Question!!`;
+    const res = await fetch("/api/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt: questionPrompt }),
+    });
+    const data = await res.json();
+    setQuestion((it) => [...it, { question: data.response }]);
+  };
+  useEffect(() => {
+    if (question.length <= 9) {
+      handleQuestion();
+    } else {
+      console.log(question.length);
+    }
+  });
+
+  function handleSelectedQuestion(target: string) {
+    setPrompt(target);
+  }
   // Single Page
   return (
     <div className="w-full flex flex-col justify-center items-center">
@@ -150,27 +177,17 @@ export default function Home() {
           </Command>
           <Command>
             <CommandList>
-              <CommandGroup heading="Recommendation Chat">
-                <CommandItem>
-                  <Sparkles />
-                  <span>How to make Italian Foods</span>
-                </CommandItem>
-                <CommandItem>
-                  <Sparkles />
-                  <span>Tips to start a freelance career</span>
-                </CommandItem>
-                <CommandItem>
-                  <Sparkles />
-                  <span>Learn Web Development step-by-step</span>
-                </CommandItem>
-                <CommandItem>
-                  <Sparkles />
-                  <span>How to write a professional CV</span>
-                </CommandItem>
-                <CommandItem>
-                  <Sparkles />
-                  <span>Explore historical places in Indonesia</span>
-                </CommandItem>
+              <CommandGroup heading="Recommendation from AI">
+                {question.map((it, index) => (
+                  <CommandItem
+                    key={index}
+                    value={it.question}
+                    onSelect={() => handleSelectedQuestion(it.question)}
+                  >
+                    <Sparkles />
+                    <span>{it.question}</span>
+                  </CommandItem>
+                ))}
               </CommandGroup>
             </CommandList>
           </Command>
