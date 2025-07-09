@@ -51,10 +51,12 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type Chat = {
   ai: string;
   user: string;
+  loading: boolean;
 };
 
 export default function Home() {
@@ -64,19 +66,27 @@ export default function Home() {
   const [chat, setChat] = useState<Chat[]>([]);
   // question
   const [question, setQuestion] = useState<any[]>([]);
+  // Loading
+  const [loading, setLoading] = useState(false);
+  const displayChat = loading ? [...chat, { user: prompt, ai: "" }] : chat;
 
   //
   //  Handling when User Click Input Button
   //
   const handleSubmit = async () => {
+    setLoading(true);
     const res = await fetch("/api/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prompt: prompt }),
     });
     const data = await res.json();
-    setChat((it) => [...it, { ai: data.response, user: prompt }]);
+    setChat((it) => [
+      ...it,
+      { user: prompt, ai: data.response, loading: true },
+    ]);
     setPrompt("");
+    setLoading(false);
   };
 
   //
@@ -203,28 +213,43 @@ export default function Home() {
         {/** End aside */}
         <div className="w-full z-50 h-full relative">
           <div className="w-full min-h-screen overflow-scroll">
-            {chat.map((it, index) => (
-              <div key={index} className="flex flex-col w-full">
-                <Card className="w-full max-w-md self-end mt-12">
+            {displayChat.map((it, index) => (
+              <div className="flex flex-col w-full">
+                <Card
+                  key={index}
+                  className="w-full max-w-md self-end mt-12 duration-300"
+                >
                   <CardHeader>
                     <CardTitle>You</CardTitle>
                     <CardDescription>{it.user}</CardDescription>
                   </CardHeader>
                 </Card>
-                <Card className="w-full max-w-md self-start mt-12 outline-none border-none shadow-none">
-                  <CardHeader>
-                    <CardTitle>AI</CardTitle>
-                    <CardDescription>{it.ai}</CardDescription>
-                  </CardHeader>
-                  <CardFooter>
-                    <Button variant="ghost" size="icon" className="size-8">
-                      <Copy />
-                    </Button>
-                  </CardFooter>
-                </Card>
+
+                {it.ai ? (
+                  <Card className="w-full max-w-md self-start mt-12 outline-none border-none shadow-none">
+                    <CardHeader>
+                      <CardTitle>AI</CardTitle>
+                      <CardDescription>{it.ai}</CardDescription>
+                    </CardHeader>
+                    <CardFooter>
+                      <Button variant="ghost" size="icon" className="size-8">
+                        <Copy />
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                ) : (
+                  <div className="w-full max-w-md self-start mt-4 p-2">
+                    <Skeleton className="h-12 w-12 rounded-full" />
+                    <div className="space-y-2 mt-2">
+                      <Skeleton className="h-4 w-[250px]" />
+                      <Skeleton className="h-4 w-[200px]" />
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>
+
           {/** Write anything at here */}
           <div className="w-full flex gap-2 p-4 bottom-2 sticky bg-gray-200 rounded-4xl items-center">
             <textarea
