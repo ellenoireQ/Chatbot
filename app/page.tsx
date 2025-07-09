@@ -204,7 +204,7 @@ export default function Home() {
         <div className="w-full z-50 h-full relative">
           <div className="w-full min-h-screen overflow-scroll">
             {chat.map((it, index) => (
-              <div className="flex flex-col w-full">
+              <div key={index} className="flex flex-col w-full">
                 <Card className="w-full max-w-md self-end mt-12">
                   <CardHeader>
                     <CardTitle>You</CardTitle>
