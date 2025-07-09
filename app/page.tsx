@@ -52,6 +52,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type Chat = {
   ai: string;
@@ -232,9 +237,20 @@ export default function Home() {
                       <CardDescription>{it.ai}</CardDescription>
                     </CardHeader>
                     <CardFooter>
-                      <Button variant="ghost" size="icon" className="size-8">
-                        <Copy />
-                      </Button>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="size-8"
+                          >
+                            <Copy />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Copy</p>
+                        </TooltipContent>
+                      </Tooltip>
                     </CardFooter>
                   </Card>
                 ) : (
