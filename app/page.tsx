@@ -1,5 +1,6 @@
 "use client";
 import {
+  Annoyed,
   ArrowUpToLine,
   Bot,
   Cable,
@@ -62,6 +63,7 @@ import { RootState, store } from "./reduxjs/store";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { changeDarkMode } from "./reduxjs/reducer";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 
 type Chat = {
   ai: string;
@@ -189,10 +191,12 @@ export default function Home() {
                   <Moon />
                   <span>Dark Mode</span>
                 </CommandItem>
-                <CommandItem>
-                  <Github />
-                  <span>Source Code</span>
-                </CommandItem>
+                <Link href="https://github.com/ellenoireQ/Chatbot.git">
+                  <CommandItem>
+                    <Github />
+                    <span>Source Code</span>
+                  </CommandItem>
+                </Link>
               </CommandGroup>
               <CommandSeparator />
               <CommandGroup heading="AI Model">
@@ -241,14 +245,17 @@ export default function Home() {
         {/** End aside */}
         <div className="w-full z-50 h-full relative">
           <div className="w-full min-h-screen overflow-scroll">
-            <div className="w-full h-screen flex flex-col justify-center items-center">
-              <Cable size={120} className="text-gray-800" />
-              <h1 className="scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance text-gray-800">
-                http://localhost:11434/api/generate Not Found
+            <div
+              className={`${
+                displayChat.length === 0 ? `block` : `hidden`
+              } w-full h-screen flex flex-col justify-center items-center`}
+            >
+              <Annoyed size={100} className="text-gray-800" />
+              <h1 className="scroll-m-20 text-center text-3xl font-extrabold tracking-tight text-balance text-gray-800">
+                Empty Chat
               </h1>
-              <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight pt-4">
-                please run
-                <span className="bg-blue-100 p-2">ollama run model</span>
+              <h3 className="scroll-m-20 text-1xl font-semibold tracking-tight pt-4 text-gray-500">
+                Typing anything, or start chat with recommendation from ai
               </h3>
             </div>
             {displayChat.map((it, index) => (
