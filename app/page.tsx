@@ -58,7 +58,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import store from "./reduxjs/store";
+import { RootState, store } from "./reduxjs/store";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { changeDarkMode } from "./reduxjs/reducer";
 
@@ -79,7 +79,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const displayChat = loading ? [...chat, { user: prompt, ai: "" }] : chat;
 
-  const theme = useSelector((e: any) => e.counter.darkMode);
+  const theme = useSelector((e: RootState) => e.counter.darkMode);
   const dispatch = useDispatch();
 
   //
