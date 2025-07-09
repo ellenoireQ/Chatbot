@@ -1,8 +1,8 @@
 "use client";
 import {
   ArrowUpToLine,
-  Badge,
   Bot,
+  Cable,
   Calculator,
   Calendar,
   Copy,
@@ -61,6 +61,7 @@ import {
 import { RootState, store } from "./reduxjs/store";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { changeDarkMode } from "./reduxjs/reducer";
+import { Badge } from "@/components/ui/badge";
 
 type Chat = {
   ai: string;
@@ -162,11 +163,16 @@ export default function Home() {
         {/** Aside */}
         <aside className="w-4/12 h-full z-50 sticky top-0">
           <div className="pt-5">
-            <div className="flex gap-2">
-              <MessageCircleCode className="text-gray-800" />
-              <h4 className="scroll-m-20 text-xl font-semibold tracking-tight text-gray-800">
-                Chatbot
-              </h4>
+            <div className="w-full flex">
+              <div className="flex gap-1">
+                <MessageCircleCode className="text-gray-800" />
+                <h4 className="scroll-m-20 text-xl font-semibold tracking-tight text-gray-800">
+                  Chatbot
+                </h4>
+                <Badge variant="destructive" className="bg-blue-500 ml-3">
+                  WIP
+                </Badge>
+              </div>
             </div>
             <p className="leading-7 [&:not(:first-child)]:mt-2">
               This is for Educational Purpose
@@ -235,6 +241,16 @@ export default function Home() {
         {/** End aside */}
         <div className="w-full z-50 h-full relative">
           <div className="w-full min-h-screen overflow-scroll">
+            <div className="w-full h-screen flex flex-col justify-center items-center">
+              <Cable size={120} className="text-gray-800" />
+              <h1 className="scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance text-gray-800">
+                http://localhost:11434/api/generate Not Found
+              </h1>
+              <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight pt-4">
+                please run
+                <span className="bg-blue-100 p-2">ollama run model</span>
+              </h3>
+            </div>
             {displayChat.map((it, index) => (
               <div className="flex flex-col w-full">
                 <Card
