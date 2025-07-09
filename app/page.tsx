@@ -259,11 +259,8 @@ export default function Home() {
               </h3>
             </div>
             {displayChat.map((it, index) => (
-              <div className="flex flex-col w-full">
-                <Card
-                  key={index}
-                  className="w-full max-w-md self-end mt-12 duration-300"
-                >
+              <div key={index} className="flex flex-col w-full">
+                <Card className="w-full max-w-md self-end mt-12 duration-300">
                   <CardHeader>
                     <CardTitle>You</CardTitle>
                     <CardDescription>{it.user}</CardDescription>
