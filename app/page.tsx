@@ -64,6 +64,7 @@ import { Provider, useDispatch, useSelector } from "react-redux";
 import { changeDarkMode } from "./reduxjs/reducer";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import { useTheme } from "next-themes";
 
 type Chat = {
   ai: string;
@@ -72,6 +73,7 @@ type Chat = {
 };
 
 export default function Home() {
+  const { theme, setTheme } = useTheme();
   // prompt
   const [prompt, setPrompt] = useState("");
   // Chat
@@ -82,7 +84,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const displayChat = loading ? [...chat, { user: prompt, ai: "" }] : chat;
 
-  const theme = useSelector((e: RootState) => e.counter.darkMode);
+  //const theme = useSelector((e: RootState) => e.counter.darkMode);
   const dispatch = useDispatch();
 
   //
@@ -130,6 +132,7 @@ export default function Home() {
     setQuestion((it) => [...it, { question: data.response }]);
   };
   useEffect(() => {
+    setTheme("system");
     if (question.length <= 9) {
       handleQuestion();
     } else {
@@ -155,7 +158,7 @@ export default function Home() {
 
   const handleTheme = async () => {
     const disp = dispatch(changeDarkMode());
-    console.log(theme);
+    //console.log(theme);
     return disp;
   };
   // Single Page
@@ -180,7 +183,7 @@ export default function Home() {
               This is for Educational Purpose
             </p>
           </div>
-          <Command className="rounded-lg md:min-w-[450px] pt-12">
+          <Command className="rounded-lg md:min-w-[450px] pt-12 dark:bg-transparent">
             <CommandList>
               <CommandGroup heading="Quick Menu">
                 <CommandItem onSelect={() => handleAddNewChat()}>
@@ -225,7 +228,7 @@ export default function Home() {
               </CommandGroup>
             </CommandList>
           </Command>
-          <Command>
+          <Command className="dark:bg-transparent">
             <CommandList>
               <CommandGroup heading="Recommendation from AI">
                 {question.map((it, index) => (
@@ -250,11 +253,11 @@ export default function Home() {
                 displayChat.length === 0 ? `block` : `hidden`
               } w-full h-screen flex flex-col justify-center items-center`}
             >
-              <Annoyed size={100} className="text-gray-800" />
-              <h1 className="scroll-m-20 text-center text-3xl font-extrabold tracking-tight text-balance text-gray-800">
+              <Annoyed size={100} className="text-gray-800 dark:text-white" />
+              <h1 className="scroll-m-20 text-center text-3xl font-extrabold tracking-tight text-balance text-gray-800 dark:text-white">
                 Empty Chat
               </h1>
-              <h3 className="scroll-m-20 text-1xl font-semibold tracking-tight pt-4 text-gray-500">
+              <h3 className="scroll-m-20 text-1xl font-semibold tracking-tight pt-4 text-gray-500 dark:text-white">
                 Typing anything, or start chat with recommendation from ai
               </h3>
             </div>
@@ -308,7 +311,7 @@ export default function Home() {
           <div className="w-full flex gap-2 p-4 bottom-2 sticky bg-gray-200 rounded-4xl items-center">
             <textarea
               placeholder="Write your imagination..."
-              className="max-h-40 w-full resize-none overflow-scroll leading-7 border-none focus:outline-none bg-transparent"
+              className="max-h-40 w-full resize-none overflow-scroll leading-7 border-none focus:outline-none bg-transparent dark:text-black text-black"
               rows={1}
               ref={textareaRef}
               value={prompt}
