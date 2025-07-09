@@ -138,6 +138,10 @@ export default function Home() {
     setChat([]);
     setQuestion([]);
   }
+
+  function handleCopyText(e: string) {
+    return navigator.clipboard.writeText(e);
+  }
   // Single Page
   return (
     <div className="w-full flex flex-col justify-center items-center">
@@ -243,6 +247,7 @@ export default function Home() {
                             variant="ghost"
                             size="icon"
                             className="size-8"
+                            onClick={() => handleCopyText(it.ai)}
                           >
                             <Copy />
                           </Button>
