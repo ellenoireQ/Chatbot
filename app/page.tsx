@@ -58,6 +58,10 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
+import store from "./reduxjs/store";
+import { Provider, useDispatch, useSelector } from "react-redux";
+import { changeDarkMode } from "./reduxjs/reducer";
+
 type Chat = {
   ai: string;
   user: string;
@@ -74,6 +78,9 @@ export default function Home() {
   // Loading
   const [loading, setLoading] = useState(false);
   const displayChat = loading ? [...chat, { user: prompt, ai: "" }] : chat;
+
+  const theme = useSelector((e: any) => e.counter.darkMode);
+  const dispatch = useDispatch();
 
   //
   //  Handling when User Click Input Button
@@ -142,6 +149,12 @@ export default function Home() {
   function handleCopyText(e: string) {
     return navigator.clipboard.writeText(e);
   }
+
+  const handleTheme = async () => {
+    const disp = dispatch(changeDarkMode());
+    console.log(theme);
+    return disp;
+  };
   // Single Page
   return (
     <div className="w-full flex flex-col justify-center items-center">
@@ -166,7 +179,7 @@ export default function Home() {
                   <Plus />
                   <span>New Chat</span>
                 </CommandItem>
-                <CommandItem>
+                <CommandItem onSelect={() => handleTheme()}>
                   <Moon />
                   <span>Dark Mode</span>
                 </CommandItem>
