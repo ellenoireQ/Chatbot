@@ -145,14 +145,14 @@ export default function Home() {
     });
     const data = await openai.json();
     if (data.errCode === 429) {
-      setError(true);
+      setError(false);
       setErrorMessage(data.message);
       console.log(error);
     }
     setQuestion((it) => [...it, { question: data.response }]);
   };
   useEffect(() => {
-    if (question.length <= 9) {
+    if (question.length <= 5) {
       handleQuestion();
     } else {
       console.log(question.length);
@@ -254,17 +254,9 @@ export default function Home() {
                   <SelectContent>
                     <SelectGroup>
                       <SelectLabel>Gen</SelectLabel>
-                      <SelectItem value="apple">
+                      <SelectItem value="cypher">
                         <Bot />
-                        <span>LLama 3.2</span>
-                      </SelectItem>
-                      <SelectItem value="apple">
-                        <Bot />
-                        <span>Gemini</span>
-                      </SelectItem>
-                      <SelectItem value="apple">
-                        <Bot />
-                        <span>Gemma</span>
+                        <span>Cypher Alpha (Free)</span>
                       </SelectItem>
                     </SelectGroup>
                   </SelectContent>
@@ -275,16 +267,23 @@ export default function Home() {
           <Command className="bg-transparent">
             <CommandList>
               <CommandGroup heading="Recommendation from AI">
-                {question.map((it, index) => (
-                  <CommandItem
-                    key={index}
-                    value={it.question}
-                    onSelect={() => handleSelectedQuestion(it.question)}
-                  >
+                {error && (
+                  <CommandItem>
                     <Sparkles />
-                    <span>{it.question}</span>
+                    <span>Error: Limit exceeded</span>
                   </CommandItem>
-                ))}
+                )}
+                {!error &&
+                  question.map((it, index) => (
+                    <CommandItem
+                      key={index}
+                      value={it.question}
+                      onSelect={() => handleSelectedQuestion(it.question)}
+                    >
+                      <Sparkles />
+                      <span>{it.question}</span>
+                    </CommandItem>
+                  ))}
               </CommandGroup>
             </CommandList>
           </Command>
