@@ -195,6 +195,12 @@ export default function Home() {
     console.log(themeSelector);
     return disp;
   };
+
+  // Fix hydration
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
   // Single Page
   return (
     <div className="w-full flex flex-col justify-center items-center">
@@ -225,25 +231,26 @@ export default function Home() {
                   <span>New Chat</span>
                 </CommandItem>
                 <CommandItem onSelect={() => handleTheme()}>
-                  {theme == "light" && (
+                  {isClient && theme == "light" && (
                     <div className="flex gap-2 items-center">
                       <Sun />
                       <span>Light Mode</span>
                     </div>
                   )}
-                  {theme == "dark" && (
+                  {isClient && theme == "dark" && (
                     <div className="flex gap-2 items-center">
                       <Moon />
                       <span>Dark Mode</span>
                     </div>
                   )}
-                  {theme == "system" && (
+                  {isClient && theme == "system" && (
                     <div className="flex gap-2 items-center">
                       <MonitorCog />
                       <span>System Mode</span>
                     </div>
                   )}
                 </CommandItem>
+
                 <Link href="https://github.com/ellenoireQ/Chatbot.git">
                   <CommandItem>
                     <Github />
