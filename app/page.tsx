@@ -10,11 +10,13 @@ import {
   CreditCard,
   Github,
   MessageCircleCode,
+  MonitorCog,
   Moon,
   Plus,
   Settings,
   Smile,
   Sparkles,
+  Sun,
   Trash,
   User,
 } from "lucide-react";
@@ -178,8 +180,8 @@ export default function Home() {
           <div className="pt-5">
             <div className="w-full flex">
               <div className="flex gap-1">
-                <MessageCircleCode className="text-gray-800" />
-                <h4 className="scroll-m-20 text-xl font-semibold tracking-tight text-gray-800">
+                <MessageCircleCode className="light:text-gray-800 dark:text-white" />
+                <h4 className="scroll-m-20 text-xl font-semibold tracking-tight light:text-gray-800 dark:text-white">
                   Chatbot
                 </h4>
                 <Badge variant="destructive" className="bg-blue-500 ml-3">
@@ -191,7 +193,7 @@ export default function Home() {
               This is for Educational Purpose
             </p>
           </div>
-          <Command className="rounded-lg md:min-w-[450px] pt-12 dark:bg-transparent">
+          <Command className="rounded-lg md:min-w-[450px] pt-12 bg-transparent">
             <CommandList>
               <CommandGroup heading="Quick Menu">
                 <CommandItem onSelect={() => handleAddNewChat()}>
@@ -199,8 +201,24 @@ export default function Home() {
                   <span>New Chat</span>
                 </CommandItem>
                 <CommandItem onSelect={() => handleTheme()}>
-                  <Moon />
-                  <span>Dark Mode</span>
+                  {theme == "light" && (
+                    <div className="flex gap-2 items-center">
+                      <Sun />
+                      <span>Light Mode</span>
+                    </div>
+                  )}
+                  {theme == "dark" && (
+                    <div className="flex gap-2 items-center">
+                      <Moon />
+                      <span>Dark Mode</span>
+                    </div>
+                  )}
+                  {theme == "system" && (
+                    <div className="flex gap-2 items-center">
+                      <MonitorCog />
+                      <span>System Mode</span>
+                    </div>
+                  )}
                 </CommandItem>
                 <Link href="https://github.com/ellenoireQ/Chatbot.git">
                   <CommandItem>
@@ -236,7 +254,7 @@ export default function Home() {
               </CommandGroup>
             </CommandList>
           </Command>
-          <Command className="dark:bg-transparent">
+          <Command className="bg-transparent">
             <CommandList>
               <CommandGroup heading="Recommendation from AI">
                 {question.map((it, index) => (
@@ -261,11 +279,14 @@ export default function Home() {
                 displayChat.length === 0 ? `block` : `hidden`
               } w-full h-screen flex flex-col justify-center items-center`}
             >
-              <Annoyed size={100} className="text-gray-800 dark:text-white" />
-              <h1 className="scroll-m-20 text-center text-3xl font-extrabold tracking-tight text-balance text-gray-800 dark:text-white">
+              <Annoyed
+                size={100}
+                className="light:text-gray-800 dark:text-white"
+              />
+              <h1 className="scroll-m-20 text-center text-3xl font-extrabold tracking-tight text-balance light:text-gray-800 dark:text-white">
                 Empty Chat
               </h1>
-              <h3 className="scroll-m-20 text-1xl font-semibold tracking-tight pt-4 text-gray-500 dark:text-white">
+              <h3 className="scroll-m-20 text-1xl font-semibold tracking-tight pt-4 light:text-gray-500 dark:text-white">
                 Typing anything, or start chat with recommendation from ai
               </h3>
             </div>
@@ -273,16 +294,24 @@ export default function Home() {
               <div key={index} className="flex flex-col w-full">
                 <Card className="w-full max-w-md self-end mt-12 duration-300">
                   <CardHeader>
-                    <CardTitle>You</CardTitle>
-                    <CardDescription>{it.user}</CardDescription>
+                    <CardTitle className="light:text-black dark:text-white">
+                      You
+                    </CardTitle>
+                    <CardDescription className="light:text-black dark:text-white">
+                      {it.user}
+                    </CardDescription>
                   </CardHeader>
                 </Card>
 
                 {it.ai ? (
                   <Card className="w-full max-w-md self-start mt-12 outline-none border-none shadow-none">
                     <CardHeader>
-                      <CardTitle>AI</CardTitle>
-                      <CardDescription>{it.ai}</CardDescription>
+                      <CardTitle className="light:text-black dark:text-white">
+                        AI
+                      </CardTitle>
+                      <CardDescription className="light:text-black dark:text-white">
+                        {it.ai}
+                      </CardDescription>
                     </CardHeader>
                     <CardFooter>
                       <Tooltip>
