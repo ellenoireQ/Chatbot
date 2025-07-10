@@ -125,13 +125,21 @@ export default function Home() {
   //
   const handleQuestion = async () => {
     const questionPrompt = `make one question like random question about tech or anything you want, only question like "question" no anything only question. one Question!!`;
-    const res = await fetch("/api/generate", {
+    const openai = await fetch("/api/generate", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: questionPrompt }),
+      body: JSON.stringify({
+        model: "openrouter/cypher-alpha:free",
+        messages: [
+          {
+            role: "user",
+            content: questionPrompt,
+          },
+        ],
+      }),
     });
-    const data = await res.json();
+    const data = await openai.json();
     setQuestion((it) => [...it, { question: data.response }]);
+    console.log(data);
   };
   useEffect(() => {
     if (question.length <= 9) {
