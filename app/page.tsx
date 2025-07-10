@@ -9,6 +9,7 @@ import {
   Copy,
   CreditCard,
   Github,
+  HeartCrack,
   MessageCircleCode,
   MonitorCog,
   Moon,
@@ -89,6 +90,9 @@ export default function Home() {
   const { theme, setTheme } = useTheme();
   const dispatch = useDispatch();
 
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   //
   //  Handling when User Click Input Button
   //
@@ -99,7 +103,9 @@ export default function Home() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prompt: prompt }),
     });
+
     const data = await res.json();
+
     setChat((it) => [
       ...it,
       { user: prompt, ai: data.response, loading: true },
@@ -138,8 +144,12 @@ export default function Home() {
       }),
     });
     const data = await openai.json();
+    if (data.errCode === 429) {
+      setError(true);
+      setErrorMessage(data.message);
+      console.log(error);
+    }
     setQuestion((it) => [...it, { question: data.response }]);
-    console.log(data);
   };
   useEffect(() => {
     if (question.length <= 9) {
@@ -284,7 +294,23 @@ export default function Home() {
           <div className="w-full min-h-screen overflow-scroll">
             <div
               className={`${
-                displayChat.length === 0 ? `block` : `hidden`
+                error ? `block` : `hidden`
+              } w-full h-screen flex flex-col justify-center items-center`}
+            >
+              <HeartCrack
+                size={100}
+                className="light:text-gray-800 dark:text-white"
+              />
+              <h1 className="scroll-m-20 text-center text-3xl font-extrabold tracking-tight text-balance light:text-gray-800 dark:text-white">
+                Huhu....
+              </h1>
+              <h3 className="scroll-m-20 text-1xl font-semibold tracking-tight pt-4 light:text-gray-500 dark:text-white">
+                {errorMessage}
+              </h3>
+            </div>
+            <div
+              className={`${
+                !error && displayChat.length === 0 ? `block` : `hidden`
               } w-full h-screen flex flex-col justify-center items-center`}
             >
               <Annoyed

@@ -32,6 +32,13 @@ export async function POST(req: Request) {
     }),
   });
   const result = await api.json();
+  if (!api.ok) {
+    return Response.json({
+      errCode: api.status,
+      message: result.error.message,
+    });
+  }
+
   console.log(result);
   return Response.json({ response: result.choices?.[0]?.message?.content });
 }
