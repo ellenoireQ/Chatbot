@@ -157,7 +157,7 @@ export default function Home() {
     } else {
       console.log(question.length);
     }
-  });
+  }, [question.length]);
 
   //
   //  Handle Select Quest
