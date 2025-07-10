@@ -1,13 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { useTheme } from "next-themes";
 
+interface Theme {
+  mode: number;
+}
+
+const initialState: Theme = {
+  mode: 0,
+};
 export const reducerSlice = createSlice({
   name: "counter",
-  initialState: {
-    darkMode: false,
-  },
+  initialState: initialState,
   reducers: {
     changeDarkMode: (state) => {
-      state.darkMode = !state.darkMode;
+      state.mode = state.mode + 1;
+
+      if (state.mode === 3) {
+        state.mode = 0;
+      }
     },
   },
 });

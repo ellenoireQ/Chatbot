@@ -73,7 +73,6 @@ type Chat = {
 };
 
 export default function Home() {
-  const { theme, setTheme } = useTheme();
   // prompt
   const [prompt, setPrompt] = useState("");
   // Chat
@@ -84,7 +83,8 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const displayChat = loading ? [...chat, { user: prompt, ai: "" }] : chat;
 
-  //const theme = useSelector((e: RootState) => e.counter.darkMode);
+  const themeSelector = useSelector((e: RootState) => e.counter.mode);
+  const { theme, setTheme } = useTheme();
   const dispatch = useDispatch();
 
   //
@@ -132,7 +132,6 @@ export default function Home() {
     setQuestion((it) => [...it, { question: data.response }]);
   };
   useEffect(() => {
-    setTheme("system");
     if (question.length <= 9) {
       handleQuestion();
     } else {
@@ -158,7 +157,16 @@ export default function Home() {
 
   const handleTheme = async () => {
     const disp = dispatch(changeDarkMode());
-    //console.log(theme);
+    setTheme(
+      themeSelector == 0
+        ? "light"
+        : themeSelector == 1
+        ? "dark"
+        : themeSelector == 2
+        ? "system"
+        : "light"
+    );
+    console.log(themeSelector);
     return disp;
   };
   // Single Page
