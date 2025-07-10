@@ -101,7 +101,14 @@ export default function Home() {
     const res = await fetch("/api/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: prompt }),
+      body: JSON.stringify({
+        model: "llama3.2:1b",
+        messages: [
+          {
+            content: prompt,
+          },
+        ],
+      }),
     });
 
     const data = await res.json();
@@ -134,10 +141,9 @@ export default function Home() {
     const openai = await fetch("/api/generate", {
       method: "POST",
       body: JSON.stringify({
-        model: "openrouter/cypher-alpha:free",
+        model: "llama3.2:1b",
         messages: [
           {
-            role: "user",
             content: questionPrompt,
           },
         ],
@@ -247,16 +253,16 @@ export default function Home() {
               </CommandGroup>
               <CommandSeparator />
               <CommandGroup heading="AI Model">
-                <Select>
+                <Select defaultValue="ollama">
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="AI Model" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
                       <SelectLabel>Gen</SelectLabel>
-                      <SelectItem value="cypher">
+                      <SelectItem value="ollama">
                         <Bot />
-                        <span>Cypher Alpha (Free)</span>
+                        <span>Ollama (Local)</span>
                       </SelectItem>
                     </SelectGroup>
                   </SelectContent>

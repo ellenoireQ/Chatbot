@@ -2,7 +2,7 @@ export async function POST(req: Request) {
   const date = await req.json();
   const params = date.messages?.[0]?.content;
 
-  /*const ollama = await fetch("http://localhost:11434/api/generate", {
+  const ollama = await fetch("http://localhost:11434/api/generate", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -12,10 +12,9 @@ export async function POST(req: Request) {
     }),
   });
 
-
   const result = await ollama.json();
-  */
-  const api = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+
+  /*const api = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
@@ -40,5 +39,6 @@ export async function POST(req: Request) {
   }
 
   console.log(result);
-  return Response.json({ response: result.choices?.[0]?.message?.content });
+  */
+  return Response.json({ response: result.response });
 }
