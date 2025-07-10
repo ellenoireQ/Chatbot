@@ -9,6 +9,7 @@ import {
   Copy,
   CreditCard,
   Github,
+  HeartCrack,
   MessageCircleCode,
   MonitorCog,
   Moon,
@@ -89,6 +90,9 @@ export default function Home() {
   const { theme, setTheme } = useTheme();
   const dispatch = useDispatch();
 
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   //
   //  Handling when User Click Input Button
   //
@@ -99,7 +103,9 @@ export default function Home() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prompt: prompt }),
     });
+
     const data = await res.json();
+
     setChat((it) => [
       ...it,
       { user: prompt, ai: data.response, loading: true },
@@ -125,21 +131,33 @@ export default function Home() {
   //
   const handleQuestion = async () => {
     const questionPrompt = `make one question like random question about tech or anything you want, only question like "question" no anything only question. one Question!!`;
-    const res = await fetch("/api/generate", {
+    const openai = await fetch("/api/generate", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: questionPrompt }),
+      body: JSON.stringify({
+        model: "openrouter/cypher-alpha:free",
+        messages: [
+          {
+            role: "user",
+            content: questionPrompt,
+          },
+        ],
+      }),
     });
-    const data = await res.json();
+    const data = await openai.json();
+    if (data.errCode === 429) {
+      setError(true);
+      setErrorMessage(data.message);
+      console.log(error);
+    }
     setQuestion((it) => [...it, { question: data.response }]);
   };
   useEffect(() => {
-    if (question.length <= 9) {
+    if (question.length <= 5) {
       handleQuestion();
     } else {
       console.log(question.length);
     }
-  });
+  }, [question.length]);
 
   //
   //  Handle Select Quest
@@ -236,17 +254,9 @@ export default function Home() {
                   <SelectContent>
                     <SelectGroup>
                       <SelectLabel>Gen</SelectLabel>
-                      <SelectItem value="apple">
+                      <SelectItem value="cypher">
                         <Bot />
-                        <span>LLama 3.2</span>
-                      </SelectItem>
-                      <SelectItem value="apple">
-                        <Bot />
-                        <span>Gemini</span>
-                      </SelectItem>
-                      <SelectItem value="apple">
-                        <Bot />
-                        <span>Gemma</span>
+                        <span>Cypher Alpha (Free)</span>
                       </SelectItem>
                     </SelectGroup>
                   </SelectContent>
@@ -257,16 +267,23 @@ export default function Home() {
           <Command className="bg-transparent">
             <CommandList>
               <CommandGroup heading="Recommendation from AI">
-                {question.map((it, index) => (
-                  <CommandItem
-                    key={index}
-                    value={it.question}
-                    onSelect={() => handleSelectedQuestion(it.question)}
-                  >
+                {error && (
+                  <CommandItem>
                     <Sparkles />
-                    <span>{it.question}</span>
+                    <span>Error: Limit exceeded</span>
                   </CommandItem>
-                ))}
+                )}
+                {!error &&
+                  question.map((it, index) => (
+                    <CommandItem
+                      key={index}
+                      value={it.question}
+                      onSelect={() => handleSelectedQuestion(it.question)}
+                    >
+                      <Sparkles />
+                      <span>{it.question}</span>
+                    </CommandItem>
+                  ))}
               </CommandGroup>
             </CommandList>
           </Command>
@@ -276,7 +293,23 @@ export default function Home() {
           <div className="w-full min-h-screen overflow-scroll">
             <div
               className={`${
-                displayChat.length === 0 ? `block` : `hidden`
+                error ? `block` : `hidden`
+              } w-full h-screen flex flex-col justify-center items-center`}
+            >
+              <HeartCrack
+                size={100}
+                className="light:text-gray-800 dark:text-white"
+              />
+              <h1 className="scroll-m-20 text-center text-3xl font-extrabold tracking-tight text-balance light:text-gray-800 dark:text-white">
+                Huhu....
+              </h1>
+              <h3 className="scroll-m-20 text-1xl font-semibold tracking-tight pt-4 light:text-gray-500 dark:text-white">
+                {errorMessage}
+              </h3>
+            </div>
+            <div
+              className={`${
+                !error && displayChat.length === 0 ? `block` : `hidden`
               } w-full h-screen flex flex-col justify-center items-center`}
             >
               <Annoyed

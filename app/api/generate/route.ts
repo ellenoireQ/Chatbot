@@ -1,8 +1,8 @@
 export async function POST(req: Request) {
   const date = await req.json();
-  const params = date.prompt;
+  const params = date.messages?.[0]?.content;
 
-  const ollama = await fetch("http://localhost:11434/api/generate", {
+  /*const ollama = await fetch("http://localhost:11434/api/generate", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -12,6 +12,33 @@ export async function POST(req: Request) {
     }),
   });
 
+
   const result = await ollama.json();
-  return Response.json({ response: result.response });
+  */
+  const api = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: "openrouter/cypher-alpha:free",
+      messages: [
+        {
+          role: "user",
+          content: params,
+        },
+      ],
+    }),
+  });
+  const result = await api.json();
+  if (!api.ok) {
+    return Response.json({
+      errCode: api.status,
+      message: result.error.message,
+    });
+  }
+
+  console.log(result);
+  return Response.json({ response: result.choices?.[0]?.message?.content });
 }
