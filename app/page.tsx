@@ -291,7 +291,7 @@ export default function Home() {
               </h3>
             </div>
             {displayChat.map((it, index) => (
-              <div key={index} className="flex flex-col w-full">
+              <div key={index} className="flex flex-col w-full p-4">
                 <Card className="w-full max-w-md self-end mt-12 duration-300">
                   <CardHeader>
                     <CardTitle className="light:text-black dark:text-white">
