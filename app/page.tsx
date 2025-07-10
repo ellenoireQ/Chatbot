@@ -145,7 +145,7 @@ export default function Home() {
     });
     const data = await openai.json();
     if (data.errCode === 429) {
-      setError(false);
+      setError(true);
       setErrorMessage(data.message);
       console.log(error);
     }
