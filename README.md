@@ -2,9 +2,9 @@
 
 ## 🌓 Theme Support
 
-| Light Mode                      | Dark Mode                      |
-| ------------------------------- | ------------------------------ |
-| ![](/public/screenshots/light-mode.png) | ![](/public/screenshots/dark-mode.png) |
+| Light Mode                              | Dark Mode                              |
+| --------------------------------------- | -------------------------------------- |
+| ![](public/screenshoots/light-mode.png) | ![](public/screenshoots/dark-mode.png) |
 
 A sleek chatbot interface built with **Next.js 15**, **Tailwind CSS**, **Redux Toolkit**, and **shadcn/ui**, supporting **local AI inference (Ollama)** and **cloud-based inference (Cypher Alpha via OpenRouter)**.
 
