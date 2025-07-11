@@ -1,5 +1,11 @@
 # 🤖 Chatbot AI - Local & Cloud AI Chat UI
 
+## 🌓 Theme Support
+
+| Light Mode                      | Dark Mode                      |
+| ------------------------------- | ------------------------------ |
+| ![](screenshots/light-mode.png) | ![](screenshots/dark-mode.png) |
+
 A sleek chatbot interface built with **Next.js 15**, **Tailwind CSS**, **Redux Toolkit**, and **shadcn/ui**, supporting **local AI inference (Ollama)** and **cloud-based inference (Cypher Alpha via OpenRouter)**.
 
 > ⚠️ This project currently supports **local model only** (`ollama`).  
