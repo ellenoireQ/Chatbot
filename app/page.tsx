@@ -216,7 +216,7 @@ export default function Home() {
     <div className="w-full flex flex-col justify-center items-center">
       <div className="md:w-9/12 w-full flex">
         {/** Aside */}
-        <aside className="w-4/12 h-full z-50 sticky top-0">
+        <aside className="w-4/12 h-full z-50 sticky top-0 md:block hidden">
           <div className="pt-5">
             <div className="w-full flex">
               <div className="flex gap-1">
@@ -400,8 +400,7 @@ export default function Home() {
             ))}
           </div>
 
-          {/** Write anything at here */}
-          <div className="w-full flex gap-2 p-4 bottom-2 sticky bg-gray-200 rounded-4xl items-center">
+          <div className="w-full flex gap-2 p-4 h-full bottom-2 sticky bg-gray-200 rounded-4xl items-center">
             <textarea
               placeholder="Write your imagination..."
               className="max-h-40 w-full resize-none overflow-scroll leading-7 border-none focus:outline-none bg-transparent dark:text-black text-black"
