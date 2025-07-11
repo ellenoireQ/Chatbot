@@ -93,6 +93,8 @@ export default function Home() {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  const [stateCopy, setStateCopy] = useState("Copy");
+
   //
   //  Handling when User Click Input Button
   //
@@ -177,9 +179,17 @@ export default function Home() {
     setQuestion([]);
   }
 
-  function handleCopyText(e: string) {
-    return navigator.clipboard.writeText(e);
-  }
+  const handleCopyText = async (e: string) => {
+    try {
+      await navigator.clipboard.writeText(e);
+
+      setStateCopy("Copied");
+      setTimeout(() => setStateCopy("Copy"), 2000);
+    } catch {
+      setStateCopy("Failed!");
+      setTimeout(() => setStateCopy("Copy"), 2000);
+    }
+  };
 
   const handleTheme = async () => {
     const disp = dispatch(changeDarkMode());
@@ -372,7 +382,7 @@ export default function Home() {
                           </Button>
                         </TooltipTrigger>
                         <TooltipContent>
-                          <p>Copy</p>
+                          <p>{stateCopy}</p>
                         </TooltipContent>
                       </Tooltip>
                     </CardFooter>
